@@ -33,6 +33,8 @@ export class FlightsDashboardComponent implements OnInit {
   topDay?: ITopDay;
   airlinesOverTwo: IAirlineOverTwo[] = [];
 
+  error = false;
+
   chartData: ChartConfiguration['data'] = {
     labels: [],
     datasets: [
@@ -82,7 +84,7 @@ export class FlightsDashboardComponent implements OnInit {
         };
       },
       error: (err) => {
-        console.error('Flights dashboard error:', err);
+        this.error = true;
       }
     });
   }

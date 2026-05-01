@@ -29,7 +29,6 @@ export class StackDashboardComponent implements OnInit {
   oldest?: IStackItem;
   newest?: IStackItem;
 
-  loading = true;
   error = false;
 
   chartData: ChartConfiguration['data'] = {
@@ -58,8 +57,6 @@ export class StackDashboardComponent implements OnInit {
     }).subscribe({
       next: (res) => {
 
-        this.loading = false;
-
         this.stats = res.stats;
         this.highest = res.highest;
         this.lowest = res.lowest;
@@ -81,7 +78,6 @@ export class StackDashboardComponent implements OnInit {
         };
       },
       error: () => {
-        this.loading = false;
         this.error = true;
       }
     });
