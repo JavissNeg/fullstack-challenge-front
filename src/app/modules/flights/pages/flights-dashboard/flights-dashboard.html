@@ -1,0 +1,135 @@
+<div class="p-6 space-y-6">
+
+  <!-- KPI CARDS -->
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+
+    <!-- TOP AIRPORT -->
+    <div class="bg-linear-to-br from-blue-500 to-blue-600 text-white rounded-2xl p-5 shadow">
+
+      <p class="text-sm opacity-80 flex items-center gap-2">
+        <mat-icon class="text-sm">flight_takeoff</mat-icon>
+        Top Airport
+      </p>
+
+      <p class="text-2xl font-bold mt-2">
+        {{ topAirport?.airport ?? '—' }}
+      </p>
+
+      <p class="text-sm opacity-90 mt-1">
+        {{ topAirport?.total_movement ?? 0 }} movements
+      </p>
+
+    </div>
+
+    <!-- TOP AIRLINE -->
+    <div class="bg-linear-to-br from-green-500 to-green-600 text-white rounded-2xl p-5 shadow">
+
+      <p class="text-sm opacity-80 flex items-center gap-2">
+        <mat-icon class="text-sm">flight</mat-icon>
+        Top Airline
+      </p>
+
+      <p class="text-2xl font-bold mt-2">
+        {{ topAirline?.airline ?? '—' }}
+      </p>
+
+      <p class="text-sm opacity-90 mt-1">
+        {{ topAirline?.total_flights ?? 0 }} flights
+      </p>
+
+    </div>
+
+    <!-- TOP DAY -->
+    <div class="bg-linear-to-br from-purple-500 to-purple-600 text-white rounded-2xl p-5 shadow">
+
+      <p class="text-sm opacity-80 flex items-center gap-2">
+        <mat-icon class="text-sm">calendar_today</mat-icon>
+        Top Day
+      </p>
+
+      <p class="text-2xl font-bold mt-2">
+        {{ topDay?.day ?? '—' }}
+      </p>
+
+      <p class="text-sm opacity-90 mt-1">
+        {{ topDay?.total_flights ?? 0 }} flights
+      </p>
+
+    </div>
+
+  </div>
+
+  <!-- MAIN SECTION -->
+  <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+
+    <!-- AIRLINES OVER 2 DAYS -->
+    <div class="bg-white rounded-2xl shadow p-5 border border-gray-100">
+
+      <h2 class="text-sm text-gray-500 mb-4 flex items-center gap-2">
+        <mat-icon class="text-gray-500">insights</mat-icon>
+        Airlines with more than 2 active days
+      </h2>
+
+      <div class="space-y-3">
+
+        <div
+          *ngFor="let airline of airlinesOverTwo"
+          class="flex justify-between items-center p-3 rounded-xl bg-gray-50 hover:bg-gray-100 transition">
+
+          <div class="font-medium text-gray-800">
+            {{ airline.airline }}
+          </div>
+
+          <div class="flex items-center gap-2 text-sm text-gray-600">
+            <mat-icon class="text-sm">event</mat-icon>
+            {{ airline.days_with_over_two_flights }} days
+          </div>
+
+        </div>
+
+        <div *ngIf="!airlinesOverTwo.length" class="text-sm text-gray-400">
+          No data available
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- SUMMARY CARD -->
+    <div class="bg-white rounded-2xl shadow p-5 border border-gray-100">
+
+      <h2 class="text-sm text-gray-500 mb-4 flex items-center gap-2">
+        <mat-icon class="text-gray-500">bar_chart</mat-icon>
+        Flights summary
+      </h2>
+
+      <div class="space-y-4 text-sm">
+
+        <div class="flex justify-between">
+          <span class="text-gray-600">Total flights (top airline)</span>
+          <span class="font-semibold text-gray-800">
+            {{ topAirline?.total_flights ?? 0 }}
+          </span>
+        </div>
+
+        <div class="flex justify-between">
+          <span class="text-gray-600">Total movements (top airport)</span>
+          <span class="font-semibold text-gray-800">
+            {{ topAirport?.total_movement ?? 0 }}
+          </span>
+        </div>
+
+        <div class="flex justify-between">
+          <span class="text-gray-600">Most active day flights</span>
+          <span class="font-semibold text-gray-800">
+            {{ topDay?.total_flights ?? 0 }}
+          </span>
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
