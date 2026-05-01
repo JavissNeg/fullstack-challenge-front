@@ -6,6 +6,7 @@ import { provideAnimations } from '@angular/platform-browser/animations';
 import { routes } from './app.routes';
 import { provideClientHydration, withEventReplay } from '@angular/platform-browser';
 import { loaderInterceptor } from './core/interceptors/loader.inteerceptor';
+import { provideCharts, withDefaultRegisterables } from 'ng2-charts';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -16,6 +17,7 @@ export const appConfig: ApplicationConfig = {
       withFetch(),
       withInterceptors([loaderInterceptor])
     ),
+    provideCharts(withDefaultRegisterables()),
     provideAnimations()
   ]
 };
