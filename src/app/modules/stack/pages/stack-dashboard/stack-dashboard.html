@@ -1,38 +1,40 @@
 <div class="p-6 space-y-6">
 
+  <div *ngIf="loading" class="text-gray-500">
+    Loading stack dashboard...
+  </div>
+
+  <div *ngIf="error" class="text-red-500">
+    Error loading data
+  </div>
+
   <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
 
     <div class="bg-linear-to-br from-blue-500 to-blue-600 text-white rounded-2xl p-5 shadow">
-
       <p class="text-sm opacity-80 flex items-center gap-2">
         <mat-icon class="text-sm">analytics</mat-icon>
         Total questions
       </p>
-
       <p class="text-3xl font-bold mt-2">
         {{ stats?.total ?? '—' }}
       </p>
     </div>
 
     <div class="bg-linear-to-br from-green-500 to-green-600 text-white rounded-2xl p-5 shadow">
-
       <p class="text-sm opacity-80 flex items-center gap-2">
         <mat-icon class="text-sm">check_circle</mat-icon>
         Answered
       </p>
-
       <p class="text-3xl font-bold mt-2">
         {{ stats?.answered ?? '—' }}
       </p>
     </div>
 
     <div class="bg-linear-to-br from-red-500 to-red-600 text-white rounded-2xl p-5 shadow">
-
       <p class="text-sm opacity-80 flex items-center gap-2">
         <mat-icon class="text-sm">error</mat-icon>
         Unanswered
       </p>
-
       <p class="text-3xl font-bold mt-2">
         {{ stats?.not_answered ?? '—' }}
       </p>
@@ -40,117 +42,91 @@
 
   </div>
 
-  <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+  <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
 
-    <div class="bg-white rounded-2xl shadow p-5 border border-gray-100">
+    <div class="lg:col-span-7 bg-white rounded-2xl shadow p-5 border border-gray-100">
 
-      <h2 class="text-sm text-gray-500 mb-3 flex items-center gap-2">
-        <mat-icon class="text-yellow-500">workspace_premium</mat-icon>
-        Top reputation user
+      <h2 class="text-sm text-gray-500 mb-4 flex items-center gap-2">
+        <mat-icon class="text-gray-500">donut_large</mat-icon>
+        Questions distribution
       </h2>
 
-      <div class="flex items-center gap-4">
-
-        <img
-          [src]="highest?.owner?.profile_image || 'https://i.pravatar.cc/100'"
-          class="w-14 h-14 rounded-full"
-        />
-
-        <div>
-          <p class="font-bold text-lg flex items-center gap-2">
-            {{ highest?.owner?.display_name ?? '—' }}
-          </p>
-
-          <p class="text-green-600 font-semibold flex items-center gap-2">
-            {{ highest?.owner?.reputation ?? '—' }} reputation
-          </p>
-
-          <p class="text-xs text-gray-500 mt-1">
-            {{ highest?.title }}
-          </p>
+      <div class="w-full flex justify-center">
+        <div class="w-full max-w-md">
+          <canvas
+            baseChart
+            [data]="chartData"
+            [options]="chartOptions"
+            [type]="'doughnut'">
+          </canvas>
         </div>
-
       </div>
+
     </div>
 
-    <div class="bg-white rounded-2xl shadow p-5 border border-gray-100">
+    <div class="lg:col-span-5 grid grid-cols-1 gap-4">
 
-      <h2 class="text-sm text-gray-500 mb-3 flex items-center gap-2">
-        <mat-icon class="text-gray-500">visibility_off</mat-icon>
-        Least viewed
-      </h2>
+      <div class="bg-white rounded-2xl shadow p-5 border border-gray-100">
+        <h2 class="text-sm text-gray-500 mb-2 flex items-center gap-2">
+          <mat-icon class="text-yellow-500">workspace_premium</mat-icon>
+          Top reputation user
+        </h2>
 
-      <p class="font-semibold text-gray-800 flex items-center gap-2">
-        {{ lowest?.title ?? '—' }}
-      </p>
+        <div class="flex items-center gap-4">
 
-      <div class="flex justify-between mt-3 text-sm text-gray-600">
+          <img
+            [src]="highest?.owner?.profile_image || 'https://i.pravatar.cc/100'"
+            class="w-12 h-12 rounded-full"
+          />
 
-        <span class="flex items-center gap-1">
+          <div>
+            <p class="font-bold text-sm">
+              {{ highest?.owner?.display_name ?? '—' }}
+            </p>
+
+            <p class="text-green-600 font-semibold text-sm">
+              {{ highest?.owner?.reputation ?? '—' }} rep
+            </p>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="bg-white rounded-2xl shadow p-5 border border-gray-100">
+        <h2 class="text-sm text-gray-500 mb-2 flex items-center gap-2">
+          <mat-icon class="text-gray-500">visibility_off</mat-icon>
+          Least viewed
+        </h2>
+
+        <p class="font-semibold text-gray-800 text-sm">
+          {{ lowest?.title ?? '—' }}
+        </p>
+
+        <p class="text-xs text-gray-500 mt-2">
           {{ lowest?.view_count ?? 0 }} views
-        </span>
-
-        <span class="flex items-center gap-1">
-          <mat-icon class="text-sm">person</mat-icon>
-          {{ lowest?.owner?.display_name ?? '—' }}
-        </span>
-
+        </p>
       </div>
 
-    </div>
+      <div class="bg-white rounded-2xl shadow p-5 border border-gray-100">
+        <h2 class="text-sm text-gray-500 mb-2 flex items-center gap-2">
+          <mat-icon class="text-gray-500">history</mat-icon>
+          Oldest question
+        </h2>
 
-  </div>
-
-  <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-
-    <div class="bg-white rounded-2xl shadow p-5">
-
-      <h2 class="text-sm text-gray-500 mb-2 flex items-center gap-2">
-        <mat-icon class="text-gray-500">history</mat-icon>
-        Oldest question
-      </h2>
-
-      <p class="font-semibold text-gray-800">
-        {{ oldest?.title ?? '—' }}
-      </p>
-
-      <p class="text-xs text-gray-500 mt-2 flex items-center gap-1">
-        {{ oldest?.creation_date | date:'medium' }}
-      </p>
-
-      <div class="flex flex-wrap gap-2 mt-3">
-        <span
-          *ngFor="let tag of oldest?.tags"
-          class="text-xs bg-gray-100 px-2 py-1 rounded-full"
-        >
-          #{{ tag }}
-        </span>
+        <p class="font-semibold text-gray-800 text-sm">
+          {{ oldest?.title ?? '—' }}
+        </p>
       </div>
 
-    </div>
+      <div class="bg-white rounded-2xl shadow p-5 border border-gray-100">
+        <h2 class="text-sm text-gray-500 mb-2 flex items-center gap-2">
+          <mat-icon class="text-blue-500">fiber_new</mat-icon>
+          Most recent question
+        </h2>
 
-    <div class="bg-white rounded-2xl shadow p-5">
-
-      <h2 class="text-sm text-gray-500 mb-2 flex items-center gap-2">
-        <mat-icon class="text-blue-500">fiber_new</mat-icon>
-        Most recent question
-      </h2>
-
-      <p class="font-semibold text-gray-800">
-        {{ newest?.title ?? '—' }}
-      </p>
-
-      <p class="text-xs text-gray-500 mt-2 flex items-center gap-1">
-        {{ newest?.creation_date | date:'medium' }}
-      </p>
-
-      <div class="flex flex-wrap gap-2 mt-3">
-        <span
-          *ngFor="let tag of newest?.tags"
-          class="text-xs bg-blue-50 text-blue-600 px-2 py-1 rounded-full"
-        >
-          #{{ tag }}
-        </span>
+        <p class="font-semibold text-gray-800 text-sm">
+          {{ newest?.title ?? '—' }}
+        </p>
       </div>
 
     </div>
